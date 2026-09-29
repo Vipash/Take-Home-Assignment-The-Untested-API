@@ -31,7 +31,7 @@ describe('Task Routes Integration Tests', () => {
 
       const res = await request(app).get('/tasks?page=1&limit=2');
       expect(res.status).toBe(200);
-      // Exposes off-by-one bug if page 1 returns wrong items
+      // Exposes off-by-one bug, for page 1 returns wrong items
       expect(res.body.length).toBe(2);
     });
   });

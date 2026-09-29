@@ -154,7 +154,7 @@ describe('taskService Unit Tests', () => {
       expect(new Date(completed.completedAt).getTime()).not.toBeNaN();
     });
 
-    // BUG: completeTask silently overwrites priority to 'medium'
+    // BUG: completeTask silently overwrites priority to 'medium', bad
     it('should preserve original priority when marking a task complete', () => {
       const task = taskService.create({ title: 'High Priority', priority: 'high' });
       const completed = taskService.completeTask(task.id);
