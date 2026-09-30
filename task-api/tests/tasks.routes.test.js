@@ -146,4 +146,55 @@ describe('Task Routes Integration Tests', () => {
       expect(res.status).toBe(404);
     });
   });
+
+  describe('PATCH /tasks/:id/assign', () => {
+  it('should assign a task and return trimmed assignee (200)', async () => {
+    const task = taskService.create({ title: 'Assign Task' });
+    const res = await request(app)
+      .patch(`/tasks/${task.id}/assign`)
+      .send({ assignee: '  Alice Dev  ' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.assignee).toBe('Alice Dev');
+  });
+
+  it('should allow reassigning an already assigned task', async () => {
+    const task = taskService.create({ title: 'Reassign Task' });
+    taskService.assignTask(task.id, 'Alice');
+
+    const res = await request(app)
+      .patch(`/tasks/${task.id}/assign`)
+      .send({ assignee: 'Bob' });
+
+    expect(res.status).toBe(200);
+    expect(res.body.assignee).toBe('Bob');
+  });
+
+  it('should return 404 if task id does not exist', async () => {
+    const res = await request(app)
+      .patch('/tasks/non-existent-id/assign')
+      .send({ assignee: 'Alice' });
+
+    expect(res.status).toBe(404);
+    expect(res.body.error).toBe('Task not found');
+  });
+
+  it('should return 400 for empty or whitespace-only assignee', async () => {
+    const task = taskService.create({ title: 'Task' });
+    const res = await request(app)
+      .patch(`/tasks/${task.id}/assign`)
+      .send({ assignee: '   ' });
+
+    expect(res.status).toBe(400);
+  });
+
+  it('should return 400 if assignee is not a string', async () => {
+    const task = taskService.create({ title: 'Task' });
+    const res = await request(app)
+      .patch(`/tasks/${task.id}/assign`)
+      .send({ assignee: 12345 });
+
+    expect(res.status).toBe(400);
+  });
+});
 });
