@@ -111,3 +111,12 @@ See [ASSIGNMENT.md](./ASSIGNMENT.md) for full submission requirements. At minimu
 - **Bug report** — what you found, where in the code, and why it's a bug (not just symptoms)
 - **At least one fix** — with a note on your approach
 - **`PATCH /tasks/:id/assign` implementation** — plus a short explanation of any design decisions (validation, edge cases, etc.)
+
+---
+
+## Submission Deliverables
+
+- **Test Suite:** Run `npm test` or `npm run coverage` (94%+ test coverage across services, routes, and validators).
+- **Bug Report:** Detailed in [BUGS.md](./Bugs.md).
+- **Design Notes for Assign Endpoint:** Detailed in [DESIGN_NOTES.md](./Design_Notes.md).
+- **Submission Reflections:** Detailed in [SUBMISSION.md](./Submission.md).
