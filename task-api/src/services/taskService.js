@@ -6,10 +6,10 @@ const getAll = () => [...tasks];
 
 const findById = (id) => tasks.find((t) => t.id === id);
 
-const getByStatus = (status) => tasks.filter((t) => t.status.includes(status));
+const getByStatus = (status) => tasks.filter((t) => t.status === status); // avoid returning tasks on partial substring match
 
 const getPaginated = (page, limit) => {
-  const offset = (page - 1) * limit;
+  const offset = (page - 1) * limit; //offset correctly set to page - 1 since it starts out at 0;
   return tasks.slice(offset, offset + limit);
 };
 
@@ -66,7 +66,7 @@ const completeTask = (id) => {
 
   const updated = {
     ...task,
-    priority: 'medium',
+    // priority: 'medium', removed hardcoded priority to avoid resetting it
     status: 'done',
     completedAt: new Date().toISOString(),
   };
