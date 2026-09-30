@@ -1,7 +1,8 @@
-# Design Decisions: PATCH /tasks/:id/assign
+# Design Notes: Assign Feature
 
-1. **Sanitization:** `assignee` strings are trimmed of leading/trailing whitespace to prevent duplicate identities (e.g., `"Alice"` vs `" Alice "`).
-2. **Validation:** Empty strings, whitespace-only strings, and non-string payloads return `400 Bad Request`. A 100-character ceiling prevents buffer/memory bloat.
-3. **Reassignment:** Reassignment is allowed without conflict (no 409). In standard task management systems (e.g. Jira, GitHub Issues), tasks are routinely handed off between team members.
-4. **Idempotence & Method Choice:** `PATCH` is utilized because it selectively mutates only the `assignee` field while leaving other task metadata untouched.
-5. **Missing Resource:** Returns `404 Not Found` if the provided `:id` does not match an existing task record.
+Here is how I approached the `PATCH /tasks/:id/assign` endpoint:
+
+- **Trimming whitespace:** I used `.trim()` on the assignee string so someone accidentally typing `" Alice "` gets saved as `"Alice"`.
+- **Validation:** If the body is missing an assignee, if it's not text, or if it is just blank spaces, it sends back a `400` status with an error message. I also capped the length at 100 characters so people can't send huge blocks of text.
+- **Reassigning tasks:** I decided to allow reassigning a task. If a task is assigned to Alice and Bob takes it over, calling this endpoint just updates the assignee to Bob instead of throwing an error. This matches how tools like Trello or Jira work.
+- **Task not found:** If the task ID doesn't exist in our list, it returns a `404` as requested.
